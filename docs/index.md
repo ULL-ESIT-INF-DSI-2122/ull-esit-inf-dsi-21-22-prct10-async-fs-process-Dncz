@@ -6,8 +6,17 @@
 - [Ejercicios](#id2)
   - [Ejercicio 1](#id3)
   - [Ejercicio 2](#id4)
-  <!-- - [Ejercicio 3](#id5) -->
+    - [Utilizando subprocesos](#id8)
+    - [Utilizando del método pipe](#id9)
+  - [Ejercicio 3](#id5)
   - [Ejercicio 4](#id6)
+    - [checkFileOrDir](#id10)
+    - [mkdir](#id11)
+    - [lsDir](#id12)
+    - [catFile](#id13)
+    - [remove](#id14)
+    - [move](#id15)
+    - [copy](#id16)
 - [Referencias](#id7)
 
 
@@ -46,7 +55,7 @@ Cuando se active un evento que detecta el cambio, _change_, la función pasará 
 En la clase _ComandCatAndGrep_, definida en el fichero [ejercicio2.ts](https://github.com/ULL-ESIT-INF-DSI-2122/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Dncz/blob/c6c5663156628a79dae7cde3135e23feee42f9ad/src/ejercicio2/ejercicio2.ts), se implementará el programa que devuelve el número de ocurrencias de una palabra de un fichero de texto. Para acceder al contenido del fichero expandimos el comando cat y el comando grep con la salida proporcionada por cat como entrada para obtener las líneas en las que se encuentra la palabra buscada.
 
 El ejercicio se resolverá de dos maneras:
-  - __Utilizando subprocesos__.
+  - __Utilizando subprocesos__. <a name="id8"></a>
     ```typescript
     public runWithoutPipe(file: string, word: string) {
       watch(file, (event, fileName) => {
@@ -112,7 +121,7 @@ El ejercicio se resolverá de dos maneras:
 
     Numbers of occurrences of the word ocurrencias: 2
     ```
-  - __Utilizando del método pipe__.
+  - __Utilizando del método pipe__. <a name="id9"></a>
     ```typescript
     public runWithPipe(file: string, word: string) {
       watch(file, (event, fileName) => {
@@ -160,18 +169,90 @@ src/ejercicio2/prueba2.txt does not exist
 ```
 
 
-<!-- ### Ejercicio 3 <a name="id5"></a> -->
+### Ejercicio 3 <a name="id5"></a>
+A partir de la aplicación de procesamiento de notas desarrollada en la práctica anterior, se desarrollará una aplicación que recibe desde la línea de comandos el nombre de un usuario y la ruta donde se almacenan las notas de dicho usuario.
 
+Se crea la clase WatchClass, definida en el fichero [watchDir.ts](), la cual se observará los cambios producidos en el directorio del usuario.
+
+- __watchDir__: observa lso cambios que se produzcan en el directorio del usuario.
+  ```typescript
+  public watchDir() {
+    let path: string = this.pathDir + '/' + this.userName;
+    access(path, constants.F_OK, (err) => {
+      if (err) {
+        console.log(chalk.red(path + ' does not exist'));
+      } else {
+        watch(path, (event, files) => {
+          if (event === 'change') {
+            console.log(chalk.blue('Changes have occurred in ' + path));
+          } else if (event === 'rename') {
+            access(path, (constants.F_OK, (err) => {
+              if (err) {
+                console.log(chalk.yellow(files + ' has been deleted'));
+              } else {
+                console.log(chalk.yellow(files + ' has been created'));
+              }
+            }));
+          } else {
+            console.log(chalk.yellow(path + ' has no changes'));
+          }
+        });
+      }
+    });
+  }
+  ```
+  Verificamos que la ruta del usuario existe. Si no se cumple la condición, se ejecuta la función _watch()_. En caso contrario, el programa acaba. En la primera opción, comprobamos los eventos que se produzcan en el directorio y lo mostramos por consola.
+
+  A continuación, se muestra la gestión de comandos de la aplicación.
+  ```typescript
+  yargs.command({
+    command: 'watch',
+    describe: 'Look at the user directory',
+    builder: {
+      user: {
+        describe: 'User name',
+        demandOption: true,
+        type: 'string',
+      },
+      path: {
+        describe: 'Directory name',
+        demandOption: true,
+        type: 'string',
+      },
+    },
+    handler(argv) {
+      if (typeof argv.user === 'string' && typeof argv.path === 'string') {
+        const watchDirObject = new WatchDir(argv.user, argv.path);
+        watchDirObject.watchDir();
+      } else {
+        console.log(chalk.red('Error: Invalid arguments'));
+      }
+    },
+  });
+
+  yargs.parse();
+  ```
+  __Ejecución__
+  ```bash
+  [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Dncz(main)]$node dist/ejercicio3/watchDir.js watch --user="dana" --path="src/notes"
+  Changes have occurred in src/notes/dana
+  Green note.json has been created
+  Green note.json has been created
+  ```
+  **Nota**:
+    Nunca se cumple la condición de err cuando eliminamos un fichero.
 
 ### Ejercicio 4 <a name="id6"></a>
 - **appWrapper**
-  Se desarrolla un programa usando el módulo yargs que nos permite hacer el wrapper entre los diferentes comandos Unix/Linux.
+  Se desarrolla un programa usando el módulo yargs que nos permite hacer el wrapper entre los diferentes comandos Unix/Linux. La app se define en el fichero [appWrapper.ts](https://github.com/ULL-ESIT-INF-DSI-2122/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Dncz/blob/1fafd4db472ca9beab9aba43ca8c0362ce843cfc/src/ejercicio4/appWrapper.ts).
 - **Clase Wrapper**
 
   En la clase _Wrapper_, definida en el fichero [wrapper.ts](https://github.com/ULL-ESIT-INF-DSI-2122/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Dncz/blob/c6c5663156628a79dae7cde3135e23feee42f9ad/src/ejercicio4/wrapper.ts), contendrá un atributo privado que será la ruta.
   
   En la clase, se implementan los métodos necesarios:
-  - __checkFileOrDir__: comprueba que la ruta es un directorio o un fichero. En la función, se comprueba que la ruta existe. Luego, utilizamos el método _lstat_ de fs que nos debolverá información sobre la ruta (_stats_). Comprobamos que la información es un fichero, _isFile()_, o un directorio, _isDirectory()_, y se mostrará en la consola.
+  - __checkFileOrDir__ <a name="id10"></a>
+  
+    Comprueba que la ruta es un directorio o un fichero. En la función, se comprueba que la ruta existe. Luego, utilizamos el método _lstat_ de fs que nos debolverá información sobre la ruta (_stats_). Comprobamos que la información es un fichero, _isFile()_, o un directorio, _isDirectory()_, y se mostrará en la consola.
     ```typescript
     public checkFileOrDir() {
       access(this.path, constants.F_OK, (err) => {
@@ -202,7 +283,9 @@ src/ejercicio2/prueba2.txt does not exist
     src/notes is a directory
     ```
 
-  - __mkdir__: crea un nuevo directorio a partir de la ruta, para ello utilizaremos _mkdir()_.
+  - __mkdir__<a name="id11"></a>
+    
+    Crea un nuevo directorio a partir de la ruta, para ello utilizaremos _mkdir()_.
     ```typescript
     public mkdir() {
       const path2 = './src/' + this.path;
@@ -227,7 +310,9 @@ src/ejercicio2/prueba2.txt does not exist
     The file has been created successfully
     ```
 
-  - __lsDir__: lista el contenido de un directorio. Usaremos la función _readdir()_, la cuál devolverá un array con el contenido del directorio.
+  - __lsDir__ <a name="id12"></a>
+
+    Lista el contenido de un directorio. Usaremos la función _readdir()_, la cuál devolverá un array con el contenido del directorio.
     ```typescript
     public lsDir() {
       access(this.path, constants.F_OK, (err) => {
@@ -259,7 +344,9 @@ src/ejercicio2/prueba2.txt does not exist
     prueba.ts
     ```
 
-  - __catFile__: muestra el contenido del fichero. Emplearemos la función _readFile()_ para leer el fichero de la ruta. Luego, se muestra el contenido del fichero contenido en el bufer _data_.
+  - __catFile__<a name="id13"></a>
+    
+    Muestra el contenido del fichero. Emplearemos la función _readFile()_ para leer el fichero de la ruta. Luego, se muestra el contenido del fichero contenido en el bufer _data_.
     ```typescript
     public catFile(file: string) {
       const path2 = this.path + file;
@@ -286,7 +373,9 @@ src/ejercicio2/prueba2.txt does not exist
     src/notes/Red note.json does not exist
     ```
 
-  - __remove__: borra el contenido de un directorio o fichero concreto. En este ejercicio, podemos emplear la función _rm()_ o bien utilizar _spawn()_ con el comando `rm -r` de Unix/Linux. En lo personal, para practicar, emplee la segunda opción con el método pipe. Creamos el childProcess para el comando rm y, usando pipe, redirigimos la salida estándar (rmChild.stdout) del proceso hijo a la salida estándar del proceso de nuestro programa (process.stdout).
+  - __remove__<a name="id14"></a>
+    
+    Borra el contenido de un directorio o fichero concreto. En este ejercicio, podemos emplear la función _rm()_ o bien utilizar _spawn()_ con el comando `rm -r` de Unix/Linux. En lo personal, para practicar, emplee la segunda opción con el método pipe. Creamos el childProcess para el comando rm y, usando pipe, redirigimos la salida estándar (rmChild.stdout) del proceso hijo a la salida estándar del proceso de nuestro programa (process.stdout).
     ```typescript
     public remove(thingToDelete: string) {
       const path2 = this.path + thingToDelete;
@@ -316,7 +405,9 @@ src/ejercicio2/prueba2.txt does not exist
     Dana/ has been successfully removed
     ```
 
-  - __move__: mueve el contenido pasado por parámetro a la nueva ruta., para ello utilizaremos la función _rename()_.
+  - __move__<a name="id15"></a>
+    
+    Mueve el contenido pasado por parámetro a la nueva ruta., para ello utilizaremos la función _rename()_.
     ```typescript
     public move(newPath: string, thingToMove: string) {
       const oldPath = this.path + thingToMove;
@@ -346,7 +437,9 @@ src/ejercicio2/prueba2.txt does not exist
     [~/ull-esit-inf-dsi-21-22-prct10-async-fs-process-Dncz(main)]$ls src/ejercicio4/
     appWrapper.ts  dana  prueba.txt  wrapper.ts
     ```
-  - __copy__: copia el contenido pasado por parámetro a la nueva ruta. Podemos utilizar copyFile(), cp() o spawn(). Sin embargo, la primera opción sirve sólo para ficheros y la segunda no se recomienda debido a que está en modo experimental. Para este ejercicio, utilizaremos la tercera opción con pipe.
+  - __copy__<a name="id16"></a>
+  
+    Copia el contenido pasado por parámetro a la nueva ruta. Podemos utilizar copyFile(), cp() o spawn(). Sin embargo, la primera opción sirve sólo para ficheros y la segunda no se recomienda debido a que está en modo experimental. Para este ejercicio, utilizaremos la tercera opción con pipe.
     ```typescript
     public copy(newPath: string, thingToCopy: string) {
       const oldPath = this.path + thingToCopy;
