@@ -4,8 +4,8 @@ import chalk from 'chalk';
 
 // EJECUCION:
 // sin pipe: node dist/ejercicio2/ejercicio2.js src/ejercicio2/prueba.txt src/ejercicio2/prueba.txt
-// con pipe: node dist/ejercicio2/ejercicio2.js src/ejercicio2/prueba.txt pipe cielo
-// node dist/ejercicio2/ejercicio2.js src/ejercicio2/prueba2.txt cielo
+// con pipe: node dist/ejercicio2/ejercicio2.js src/ejercicio2/prueba.txt pipe ocurrencias
+// node dist/ejercicio2/ejercicio2.js src/ejercicio2/prueba2.txt ocurrencias
 
 /**
  * Clase ComandCatAndGrep
