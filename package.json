@@ -9,9 +9,10 @@
   "scripts": {
     "test": "mocha",
     "coverage": "nyc npm test && nyc report --reporter=lcov",
+    "ej1": "tsc && node dist/ejercicio1/ejercicio1.js",
+    "mod": "tsc && dist/modificacion/watchfile.js src/modificacion/prueba.txt",
     "start": "tsc-watch --onSuccess \"node dist/prueba.js\"",
     "doc": "typedoc",
-    "make": "node ./dist/*.js",
     "compi": "tsc"
   },
   "repository": {
@@ -29,6 +30,7 @@
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.1",
     "@types/node": "^17.0.29",
+    "@types/request": "^2.48.8",
     "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
@@ -46,6 +48,7 @@
   },
   "dependencies": {
     "chalk": "^4.1.2",
+    "request": "^2.88.2",
     "yargs": "^17.4.1"
   }
 }
