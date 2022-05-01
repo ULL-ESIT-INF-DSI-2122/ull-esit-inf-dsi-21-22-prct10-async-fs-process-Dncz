@@ -67,7 +67,7 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.title === 'string' && typeof argv.user === 'string') {
-      let user = new User(argv.user);
+      const user = new User(argv.user);
       user.deleteNote(argv.title);
     } else {
       console.log(chalk.red("Error: insuficiente argumentos"));
@@ -131,7 +131,7 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.user === 'string') {
-      let usuario = new User(argv.user);
+      const usuario = new User(argv.user);
       usuario.listNotes();
     }
   },
@@ -157,7 +157,7 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.title === 'string' && typeof argv.user === 'string') {
-      let usuario = new User(argv.user);
+      const usuario = new User(argv.user);
       usuario.readNote(argv.title);
     }
   },

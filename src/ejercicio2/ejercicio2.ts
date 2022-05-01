@@ -58,7 +58,7 @@ export class ComandCatAndGrep {
             console.log(chalk.red('grep process exited with code ' + code));
           }
           console.log(comandoOut.toString());
-          let concurrence: number = this.find(comandoOut.toString().split(/[\s+\-./]/), word);
+          const concurrence: number = this.find(comandoOut.toString().split(/[\s+\-./]/), word);
           console.log(chalk.magenta.italic('Numbers of occurrences of the word ' +
                       word + ': ' + concurrence.toString()));
         });
@@ -89,7 +89,7 @@ export class ComandCatAndGrep {
           if (code !== 0) {
             console.log(`grep process exited with code ${code}`);
           }
-          let concurrence: number = this.find(comandoOut.toString().split(/[\s+\-./]/), word);
+          const concurrence: number = this.find(comandoOut.toString().split(/[\s+\-./]/), word);
           console.log(chalk.magenta.italic('Numbers of occurrences of the word ' +
                       word + ': ' + concurrence.toString()));
           process.stdout.write(comandoOut);

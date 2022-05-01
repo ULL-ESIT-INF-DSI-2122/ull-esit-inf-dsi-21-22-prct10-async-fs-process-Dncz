@@ -12,7 +12,7 @@ export class WatchDir {
    * Function that watches changes in the directory
    */
   public watchDir() {
-    let path: string = this.pathDir + '/' + this.userName;
+    const path: string = this.pathDir + '/' + this.userName;
     access(path, constants.F_OK, (err) => {
       if (err) {
         console.log(chalk.red(path + ' does not exist'));

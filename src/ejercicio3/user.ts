@@ -24,8 +24,8 @@ export class User {
    * @param {Note} newNote Nota a crear y añadir al directorio
    */
   public addNote(newNote: Note) {
-    let path: string = './src/notes/' + this.name;
-    let file: string = '/' + newNote.getName() + '.json';
+    const path: string = './src/notes/' + this.name;
+    const file: string = '/' + newNote.getName() + '.json';
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path, {recursive: true});
     }
@@ -44,8 +44,8 @@ export class User {
    * @param {Note} noteToModify Nota con el contenido modificado
    */
   public modifyNote(noteToModify: Note) {
-    let path: string = './src/notes/' + this.name;
-    let file: string = '/' + noteToModify.getName() + '.json';
+    const path: string = './src/notes/' + this.name;
+    const file: string = '/' + noteToModify.getName() + '.json';
     if (fs.existsSync(path)) {
       if (fs.existsSync(path + file)) {
         const data = {"title": noteToModify.getName(), "body": noteToModify.getBody(), "color": noteToModify.getColor()};
@@ -64,8 +64,8 @@ export class User {
    * @param {string} titleNote Título de la nota
    */
   public deleteNote(titleNote: string) {
-    let path: string = './src/notes/' + this.name;
-    let file: string = '/' + titleNote + '.json';
+    const path: string = './src/notes/' + this.name;
+    const file: string = '/' + titleNote + '.json';
     if (fs.existsSync(path)) {
       if (fs.existsSync(path + file)) {
         fs.rmSync(path + file);
@@ -83,8 +83,8 @@ export class User {
    * @param {string} titleNote Título de la nota a leer y mostrar información
    */
   public readNote(titleNote: string) {
-    let path: string = './src/notes/' + this.name;
-    let file: string = '/' + titleNote + '.json';
+    const path: string = './src/notes/' + this.name;
+    const file: string = '/' + titleNote + '.json';
     if (fs.existsSync(path)) {
       if (fs.existsSync(path + file)) {
         const data = JSON.parse(fs.readFileSync(path + file).toString());
@@ -106,10 +106,10 @@ export class User {
     const path: string = './src/notes/' + this.name;
     if (fs.existsSync(path)) {
       console.log(chalk.white("Tus notas:"));
-      let ficheros = fs.readdirSync(path);
+      const ficheros = fs.readdirSync(path);
       ficheros.forEach((file) => {
-        let readFile = fs.readFileSync(path + '/' + file);
-        let jsonFichero = JSON.parse(readFile.toString());
+        const readFile = fs.readFileSync(path + '/' + file);
+        const jsonFichero = JSON.parse(readFile.toString());
         this.printPartOfNoteByColor(jsonFichero.title, jsonFichero.color);
       });
     } else {
@@ -148,7 +148,7 @@ export class User {
    * @returns {boolean} True o False
    */
   public checkColor(color: string): boolean {
-    let colorList: string[] = ['red', 'green', 'blue', 'yellow'];
+    const colorList: string[] = ['red', 'green', 'blue', 'yellow'];
     for (let i = 0; i < colorList.length; i++) {
       if (color == colorList[i]) {
         return true;

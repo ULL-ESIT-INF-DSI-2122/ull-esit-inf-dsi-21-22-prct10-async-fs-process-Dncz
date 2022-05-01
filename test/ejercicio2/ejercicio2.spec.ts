@@ -7,12 +7,13 @@
 //   //   const exercise: ComandCatAndGrep = new ComandCatAndGrep();
 //   //   expect(exercise).to.be.instanceOf(ComandCatAndGrep);
 //   // });
+//   const file: string = 'src/ejercicio2/prueba.txt';
 //   const exercise: ComandCatAndGrep = new ComandCatAndGrep();
-//   it('find()', (done) => {
-//     // expect(exercise.find).to.exist;
-//     // expect(exercise.find).to.be.a('function');
-//     // expect(exercise.find(['Hola', 'mundo', 'Este', 'es', 'mi', 'segundo', 'Hola'], 'cielo')).to.be.equal(2);
-//     exercise.find(['Hola', 'mundo', 'Este', 'es', 'mi', 'segundo', 'Hola'], 'Hola');
-//     done();
+//   it('find()', () => {
+//     expect(exercise.runWithoutPipe).to.exist;
+//     expect(exercise.runWithoutPipe).to.be.a('function');
+//     expect(exercise.runWithoutPipe(file, 'concurrencias')).to.be.equal(undefined);
+//     // exercise.find(['Hola', 'mundo', 'Este', 'es', 'mi', 'segundo', 'Hola'], 'Hola');
+//     // done();
 //   });
 // });
