@@ -1,6 +1,15 @@
 {
   "entryPoints": [
-    "./src/prueba.ts"
+    "./src/prueba.ts",
+    "./src/ejercicio1/ejercicio1.ts",
+    "./src/ejercicio2/ejercicio2.ts",
+    "./src/ejercicio3/appNote.ts",
+    "./src/ejercicio3/ejercicio3.ts",
+    "./src/ejercicio3/note.ts", 
+    "./src/ejercicio3/user.ts",
+    "./src/ejercicio4/appWrapper.ts",
+    "./src/ejercicio4/wrapper.ts",
+    "./src/modificacion/watchfile.ts"
   ],
   "out": "./doc"
 }

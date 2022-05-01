@@ -2,10 +2,6 @@ import {access, constants, watch} from 'fs';
 import {spawn} from 'child_process';
 import chalk from 'chalk';
 
-// EJECUCION:
-// sin pipe: node dist/ejercicio2/ejercicio2.js src/ejercicio2/prueba.txt src/ejercicio2/prueba.txt
-// con pipe: node dist/ejercicio2/ejercicio2.js src/ejercicio2/prueba.txt pipe ocurrencias
-// node dist/ejercicio2/ejercicio2.js src/ejercicio2/prueba2.txt ocurrencias
 
 /**
  * Clase ComandCatAndGrep
@@ -117,13 +113,12 @@ access(fileName, constants.F_OK, (err) => {
   } else {
     if (process.argv.length < 3) {
       console.log(chalk.yellow('Specify the file name'));
-      // cuando es node dist/modificacion/watchfile.js src/modificacion/prueba.txt cat
-    } else if (process.argv[3] == 'pipe' ) { // si con pipe
+    } else if (process.argv[3] == 'pipe' ) {
       console.log(chalk.magenta.italic('Execution with pipe'));
       const word = process.argv[4];
       const exercise = new ComandCatAndGrep();
       exercise.runWithPipe(fileName, word);
-    } else { // para el comando cat y grep
+    } else {
       console.log(chalk.magenta.italic('Execution without pipe'));
       const word = process.argv[3];
       const exercise = new ComandCatAndGrep();

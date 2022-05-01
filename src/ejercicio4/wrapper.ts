@@ -107,30 +107,6 @@ export class Wrapper {
       if (err) {
         console.log(chalk.red(path2 + ' does not exist'));
       } else {
-        // lstat(path2, (err, stats) => {
-        //   if (err) {
-        //     return console.log(err + 'esta ruta no existe');
-        //   }
-        //   if (stats.isFile()) {
-        //     rm(path2, (err) => {
-        //       if (err) {
-        //         console.log('ERROR 2: error al elimnar el fichero');
-        //       } else {
-        //         console.log(chalk.green('El fichero ' + thingToDelete + ' se ha eliminado'));
-        //       }
-        //     });
-        //   } else if (stats.isDirectory()) {
-        //     rm(path2, {recursive: true}, (err) => {
-        //       if (err) {
-        //         console.log('ERROR 3: error al elimiar el directorio');
-        //       } else {
-        //         console.log(chalk.magenta('El directorio ' + thingToDelete + ' es un directorio'));
-        //       }
-        //     });
-        //   } else {
-        //     console.log(chalk.red('ERROR 4'));
-        //   }
-        // });
         const rmChild = spawn('rm', ['-r', path2]);
         rmChild.stdout.pipe(process.stdout);
         rmChild.on('close', (err) => {
