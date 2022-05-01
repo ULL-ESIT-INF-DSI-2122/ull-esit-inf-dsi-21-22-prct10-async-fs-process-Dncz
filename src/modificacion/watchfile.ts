@@ -1,5 +1,6 @@
 import {access, constants, watch} from 'fs';
 import {spawn} from 'child_process';
+import chalk from 'chalk';
 
 /**
  * Clase WatchClass
@@ -8,17 +9,9 @@ export class WatchClass {
   /**
    * Constructor
    * @param {string} fichero Nombre del fichero
+   * @param {string} comando suma o producto
    */
-  constructor(private fichero: string, private comando: string) {
-    // comprobación si el fichero existe
-    access(fichero, constants.F_OK, (error) => {
-      if (error) {
-        console.log(`El fichero ${fichero} no existe`);
-      } else {
-        this.run();
-      }
-    });
-  }
+  constructor(private fichero: string, private comando: string) {}
 
   /**
    * Función suma los datos del fichero
@@ -30,26 +23,6 @@ export class WatchClass {
       resultado += parseInt(elemento);
     });
     console.log(`Resultado suma: ${resultado}`);
-    // watch(this.fichero, (evento, ficheroNombre) => {
-    //   if (evento == 'change') {
-    //     readFile(this.fichero, (err, data) => {
-    //       if (err) {
-    //         console.log('Problemas con la lectura del fichero que quieres leer');
-    //       } else {
-    //         const arrayString = data.toString().split(' ');
-    //         let resultado: number = 0;
-    //         arrayString.forEach((elemento) => {
-    //           resultado += parseInt(elemento);
-    //         });
-    //         console.log(`Resultado: ${resultado}`);
-    //       }
-    //     });
-    //   } else if (evento =='rename') {
-    //     console.log(`${ficheroNombre}  ha sido eliminado`);
-    //   } else {
-    //     console.log(`${ficheroNombre}  no tiene cambios`);
-    //   }
-    // });
   }
 
   /**
@@ -59,7 +32,7 @@ export class WatchClass {
   private mult(arraydatos: string[]) {
     let resultado: number = 1;
     arraydatos.forEach((elemento) => {
-      resultado *= parseInt(elemento);
+      resultado = resultado * parseInt(elemento);
     });
     console.log(`Resultado: ${resultado}`);
   }
@@ -67,7 +40,7 @@ export class WatchClass {
   /**
    * Función principal
    */
-  private run() {
+  public run() {
     watch(this.fichero, (evento, ficheroNombre) => {
       if (evento == 'change') {
         const childProcess = spawn('cat', [this.fichero]);
@@ -93,10 +66,18 @@ export class WatchClass {
 /**
  * Ejecución del programa
  */
+const fileName = process.argv[2];
 if (process.argv.length < 3) {
   console.log('No has especificado el fichero');
 } else {
-  const filename = process.argv[2];
-  const comando = process.argv[3];
-  new WatchClass(filename, comando);
+  // comprobación si el fichero existe
+  access(fileName, constants.F_OK, (err) => {
+    if (err) {
+      console.log(chalk.red(fileName + ' no existe'));
+    } else {
+      const comando = process.argv[3];
+      const programa = new WatchClass(fileName, comando);
+      programa.run();
+    }
+  });
 }
